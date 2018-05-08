@@ -37,6 +37,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -548,12 +550,17 @@ public class FileActivity extends DrawerActivity
      * @param message       Message to show.
      */
     public void showSnackMessage(String message) {
-        Snackbar snackbar = Snackbar.make(
-            findViewById(R.id.coordinator_layout),
-            message,
-            Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        final View rootView = findViewById(android.R.id.content);
+        if(rootView == null) {
+            Snackbar snackbar = Snackbar.make(
+                    rootView,
+                    message,
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
+        } else {
+            // I root view is not available don't let the app brake. show the notification anyway.
+            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
 }
